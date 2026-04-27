@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório Virtual | Proporção Inversa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --accent-color: #ff3366;
+            --text-main: #e6edf3;
+            --text-secondary: #8b949e;
+            --card-bg: #161b22;
+        }
+
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; line-height: 1.6; }
+        .pixel-font { font-family: 'VT323', monospace; }
+
+        header { padding: 1.5rem 5%; background: rgba(13, 17, 23, 0.95); border-bottom: 1px solid #30363d; }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: bold; font-size: 1.5rem; letter-spacing: 2px; }
+        .logo span { color: var(--accent-color); }
+        nav ul { list-style: none; display: flex; gap: 2rem; padding: 0; margin: 0; }
+        nav a { color: var(--text-main); text-decoration: none; transition: 0.3s; }
+        nav a:hover { color: var(--accent-color); }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+        
+        .teoria-box {
+            background: #1c2128;
+            border-left: 4px solid var(--accent-color);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .teoria-box h3 { margin-top: 0; color: var(--accent-color); }
+
+        .painel-interativo { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        @media (max-width: 768px) { .painel-interativo { grid-template-columns: 1fr; } }
+
+        .simulador-box, .grafico-box { background: var(--card-bg); padding: 2rem; border-radius: 8px; border: 1px solid #30363d; }
+        input[type=range] { width: 100%; margin: 1rem 0; cursor: pointer; accent-color: var(--accent-color); }
+        
+        .math-display { display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-top: 1rem; flex-wrap: wrap; text-align: center;}
+        
+        canvas {
+            background: #000;
+            border: 1px solid var(--accent-color);
+            border-radius: 4px;
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo"><a href="index.html" style="text-decoration:none; color:inherit;">RAFA<span>MAT</span></a></div>
+            <ul>
+                <li><a href="laboratorio.html" style="color: var(--accent-color);">Voltar ao Lobby</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1 class="pixel-font" style="text-align:center; font-size: 2.5rem; margin-bottom: 2rem;">Módulo 02: Proporção Inversa</h1>
+        
+        <div class="teoria-box">
+            <h3 class="pixel-font" style="font-size: 1.5rem;">O que está acontecendo aqui?</h3>
+            <p><strong>Grandezas Inversamente Proporcionais:</strong> Quando uma variável aumenta, a outra diminui na mesma proporção. Se o número de jogadores dobra, a recompensa individual cai pela metade.</p>
+            <p><strong>A Hipérbole Equilátera:</strong> Diferente da proporção direta que gera uma reta, a inversa gera uma curva (hipérbole) que se aproxima dos eixos X e Y, mas <strong>nunca toca o zero</strong> (pois não existe divisão por zero). A constante matemática aqui é o produto: <strong>K = X . Y</strong>.</p>
+        </div>
+
+        <div class="painel-interativo">
+            <div class="simulador-box">
+                <h2 class="pixel-font" style="font-size: 1.5rem; color: #e6edf3; margin-top: 0;">Divisão de Recompensa</h2>
+                
+                <p>Ouro do Chefe (K constante): <span id="labelK" class="pixel-font" style="color: var(--accent-color); float: right;">1200</span></p>
+                <input type="range" id="constante" min="100" max="5000" step="100" value="1200">
+                
+                <p style="margin-top: 1.5rem;">Jogadores no Grupo (X): <span id="labelX" class="pixel-font" style="color: var(--accent-color); float: right;">4</span></p>
+                <input type="range" id="valorX" min="1" max="50" value="4">
+                
+                <div style="margin-top: 2rem; border-top: 1px dashed #30363d; padding-top: 1.5rem;">
+                    <p style="text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0;">Ouro por Jogador (Y):</p>
+                    <div class="math-display pixel-font">
+                        <span id="numY" style="font-size: 3rem; color: #fff; text-shadow: 0 0 10px var(--accent-color);">300 Ouro</span>
+                    </div>
+                    <div class="math-display pixel-font" style="font-size: 1.2rem; color: #8b949e; margin-top: 0.5rem;">
+                        <span>K = <span id="displayX">4</span> (X) &times; <span id="displayY">300</span> (Y) = <span id="resultadoK" style="color: var(--accent-color);">1200</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grafico-box">
+                <h2 class="pixel-font" style="font-size: 1.5rem; color: #e6edf3; margin-top: 0;">Radar (Hipérbole)</h2>
+                <canvas id="graficoCanvas" width="400" height="300"></canvas>
+                <p style="text-align: center; font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">Eixo X = Jogadores | Eixo Y = Ouro Individual</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const inputK = document.getElementById('constante');
+        const inputX = document.getElementById('valorX');
+        const labelK = document.getElementById('labelK');
+        const labelX = document.getElementById('labelX');
+        const displayY = document.getElementById('numY');
+        const spanX = document.getElementById('displayX');
+        const spanY = document.getElementById('displayY');
+        const displayK = document.getElementById('resultadoK');
+        
+        const canvas = document.getElementById('graficoCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function desenharGrafico(k, xReal, yReal) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const margem = 40;
+            const larguraUtil = canvas.width - margem * 2;
+            const alturaUtil = canvas.height - margem * 2;
+            const origemX = margem;
+            const origemY = canvas.height - margem;
+
+            const maxX = 50; 
+            const maxY = 5000;
+            
+            ctx.beginPath();
+            ctx.moveTo(origemX, margem);
+            ctx.lineTo(origemX, origemY);
+            ctx.lineTo(canvas.width - margem, origemY);
+            ctx.strokeStyle = "#8b949e";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.beginPath();
+            let moveu = false;
+            for (let i = 1; i <= maxX; i++) {
+                let currentY = k / i;
+                let posX = origemX + (i / maxX) * larguraUtil;
+                let posY = origemY - (currentY / maxY) * alturaUtil;
+                
+                if(posY < margem) posY = margem; 
+
+                if (!moveu) {
+                    ctx.moveTo(posX, posY);
+                    moveu = true;
+                } else {
+                    ctx.lineTo(posX, posY);
+                }
+            }
+            ctx.strokeStyle = "rgba(255, 51, 102, 0.3)";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            const posXAtual = origemX + (xReal / maxX) * larguraUtil;
+            let posYAtual = origemY - (yReal / maxY) * alturaUtil;
+            if(posYAtual < margem) posYAtual = margem;
+
+            ctx.beginPath();
+            ctx.arc(posXAtual, posYAtual, 6, 0, Math.PI * 2);
+            ctx.fillStyle = "#fff";
+            ctx.fill();
+            ctx.strokeStyle = "#ff3366";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.fillStyle = "#8b949e";
+            ctx.font = "12px monospace";
+            ctx.fillText("(0,0)", origemX - 30, origemY + 15);
+        }
+
+        function calcular() {
+            const k = parseInt(inputK.value);
+            const x = parseInt(inputX.value);
+            const y = (k / x).toFixed(0); 
+            
+            labelK.innerText = k;
+            labelX.innerText = x;
+            
+            displayY.innerText = y + " Ouro";
+            spanX.innerText = x;
+            spanY.innerText = y;
+            displayK.innerText = k;
+
+            desenharGrafico(k, x, y);
+        }
+
+        inputK.oninput = calcular;
+        inputX.oninput = calcular;
+        calcular(); 
+    </script>
+</body>
+</html>

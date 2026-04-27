@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório Virtual | RafaMat</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        .painel-fases {
+            display: grid;
+            /* A MÁGICA ESTÁ AQUI: auto-fill impede que o botão solitário estique */
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .cartao-simulador {
+            background: var(--card-bg); border: 1px solid #30363d; border-radius: 8px;
+            padding: 2rem; text-align: center; transition: 0.3s; text-decoration: none;
+            color: var(--text-main); display: block;
+            position: relative; overflow: hidden;
+            min-height: 320px; 
+        }
+
+        .cartao-simulador:hover {
+            border-color: var(--accent-color); 
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .titulo-secao { border-bottom: 2px dashed #30363d; padding-bottom: 0.5rem; margin-top: 3rem; }
+
+        /* --- ESTILOS ACAFE --- */
+        
+        .cartao-acafe-autentico {
+            background: #0f1218; 
+            border: 4px solid #ffd700; 
+            border-radius: 12px;
+        }
+
+        .radar-grid {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px);
+            background-size: 15px 15px; z-index: 1;
+        }
+
+        .pixel-logo-authentic {
+            width: 140px; 
+            height: auto;
+            display: block; margin: 0 auto 1rem auto;
+            image-rendering: pixelated; 
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4));
+            position: relative; z-index: 2;
+        }
+
+        .badge-bonus-green {
+            background: rgba(0, 255, 102, 0.1); color: #00ff66;
+            padding: 0.2rem 0.8rem; border-radius: 4px; font-size: 0.9rem;
+            margin-bottom: 1rem; display: inline-block; position: relative; z-index: 2;
+        }
+
+        .title-white {
+            color: #ffffff; margin: 0 0 0.5rem 0; font-size: 1.5rem; 
+            position: relative; z-index: 2;
+        }
+
+        .description-grey {
+            color: #8b949e; font-size: 0.8rem; margin-bottom: 1.5rem;
+            position: relative; z-index: 2;
+        }
+
+        .action-text {
+            color: #ffffff; font-size: 1.1rem; margin-top: 1rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            position: relative; z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo"><a href="index.html" style="text-decoration:none; color:inherit;">RAFA<span>MAT</span></a></div>
+            <ul>
+                <li><a href="laboratorio.html" style="color: var(--accent-color);">Laboratório</a></li>
+                <li><a href="index.html">Início</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main style="max-width: 1100px; margin: 0 auto; padding: 2rem 5%;">
+        <h1 class="pixel-font" style="text-align:center; font-size: 3rem; margin-bottom: 1rem;">Seleção de Ferramentas</h1>
+        
+        <h2 class="pixel-font titulo-secao" style="color: var(--accent-color);">Módulos de Aprendizagem</h2>
+        <div class="painel-fases">
+            <a href="simulador-01.html" class="cartao-simulador">
+                <div class="pixel-font badge" style="color: #00d4ff; background: rgba(0, 212, 255, 0.1);">Módulo 01</div>
+                <h2 style="margin-top: 0;">Grandezas Proporcionais</h2>
+                <div class="pixel-font" style="color: #00d4ff; margin-top: 1.5rem; font-size: 1.2rem;">[ INICIAR ]</div>
+            </a>
+            <a href="simulador-02.html" class="cartao-simulador">
+                <div class="pixel-font badge" style="color: #ff3366; background: rgba(255, 51, 102, 0.1);">Módulo 02</div>
+                <h2 style="margin-top: 0;">Grandezas Inversas</h2>
+                <div class="pixel-font" style="color: #ff3366; margin-top: 1.5rem; font-size: 1.2rem;">[ INICIAR ]</div>
+            </a>
+        </div>
+
+        <h2 class="pixel-font titulo-secao" style="color: #ffd700;">Fases Bônus / Utilitários</h2>
+        <div class="painel-fases">
+            <a href="simulador-03.html" class="cartao-simulador cartao-acafe-autentico">
+                <div class="radar-grid"></div>
+                <img src="logo_acafe_16bit.png" alt="Logo ACAFE" class="pixel-logo-authentic">
+                <div class="pixel-font badge-bonus-green">Fase Bônus</div>
+                <h2 class="pixel-font title-white">Avaliador ACAFE</h2>
+                <p class="pixel-font description-grey">Cálculo com Desvio Padrão (DP) e Média.</p>
+                <div class="pixel-font action-text">[ ACESSAR ]</div>
+            </a>
+        </div>
+    </main>
+</body>
+</html>

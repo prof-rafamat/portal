@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório Virtual | RafaMat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        /* Variáveis Visuais */
+        :root {
+            --bg-color: #0d1117;
+            --accent-color: #00d4ff;
+            --text-main: #e6edf3;
+            --text-secondary: #8b949e;
+            --card-bg: #161b22;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .pixel-font { font-family: 'VT323', monospace; }
+
+        /* Navegação */
+        header { padding: 1.5rem 5%; background: rgba(13, 17, 23, 0.95); border-bottom: 1px solid #30363d; }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: bold; font-size: 1.5rem; letter-spacing: 2px; }
+        .logo span { color: var(--accent-color); }
+        nav ul { list-style: none; display: flex; gap: 2rem; padding: 0; margin: 0; }
+        nav a { color: var(--text-main); text-decoration: none; transition: 0.3s; }
+        nav a:hover { color: var(--accent-color); }
+
+        /* Estrutura Principal */
+        .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+        
+        /* Caixa de Teoria */
+        .teoria-box {
+            background: #1c2128;
+            border-left: 4px solid var(--accent-color);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .teoria-box h3 { margin-top: 0; color: var(--accent-color); }
+
+        /* Grid do Simulador (Lado a lado em telas grandes) */
+        .painel-interativo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .painel-interativo { grid-template-columns: 1fr; }
+        }
+
+        .simulador-box, .grafico-box {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+
+        input[type=range] { width: 100%; margin: 1rem 0; cursor: pointer; accent-color: var(--accent-color); }
+        
+        /* Fração */
+        .math-fraction { display: inline-block; text-align: center; vertical-align: middle; margin: 0 1rem; }
+        .math-fraction .numerator { border-bottom: 2px solid var(--accent-color); display: block; padding: 0.2rem 0.5rem; }
+        .math-fraction .denominator { display: block; padding: 0.2rem 0.5rem; }
+        .math-display { display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-top: 1rem; }
+
+        /* Gráfico Canvas */
+        canvas {
+            background: #000;
+            border: 1px solid var(--accent-color);
+            border-radius: 4px;
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo"><a href="index.html" style="text-decoration:none; color:inherit;">RAFA<span>MAT</span></a></div>
+            <ul>
+                <li><a href="laboratorio.html" style="color: var(--accent-color);">Laboratório</a></li>
+                <li><a href="index.html">Início</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1 class="pixel-font" style="text-align:center; font-size: 2.5rem; margin-bottom: 2rem;">Laboratório Virtual</h1>
+        
+        <div class="teoria-box">
+            <h3 class="pixel-font" style="font-size: 1.5rem;">O que está acontecendo aqui?</h3>
+            <p><strong>Grandezas Diretamente Proporcionais</strong> são aquelas em que a variação de uma provoca a variação da outra na mesma proporção. Imagine o caso: você está jogando um game onde seu personagem evolui a cada monstro que ele derrota, podemos dizer que a constante de proporcionalidade (K) é o XP ganho por monstro derrotado e a grandeza <strong>Experiência Total</strong> é diretamente proporcional à quantidade de <strong> Monstros Derrotados </strong>.</p>
+            <p><strong>Por que a divisão (K) nunca muda?</strong> A razão K é a "regra do jogo". Neste exemplo, K representa o XP fixo que cada monstro rende. Não importa se você derrota 1 ou 100 inimigos, a recompensa individual por monstro não se altera. Graficamente, isso gera uma reta que obrigatoriamente <strong>nasce na origem (0,0)</strong>.</p>
+        </div>
+
+        <div class="painel-interativo">
+            <div class="simulador-box">
+                <h2 class="pixel-font" style="font-size: 1.5rem; color: #e6edf3; margin-top: 0;">Painel de Controle</h2>
+                
+                <p>XP Base por Inimigo (K): <span id="labelK" class="pixel-font" style="color: var(--accent-color); float: right;">50</span></p>
+                <input type="range" id="constante" min="10" max="200" step="10" value="50">
+                
+                <p style="margin-top: 1.5rem;">Inimigos Derrotados (X): <span id="labelX" class="pixel-font" style="color: var(--accent-color); float: right;">10</span></p>
+                <input type="range" id="valorX" min="1" max="100" value="10">
+                
+                <div style="margin-top: 2rem; border-top: 1px dashed #30363d; padding-top: 1.5rem;">
+                    <div class="math-display pixel-font">
+                        <div class="math-fraction">
+                            <span class="numerator" id="numY">500 XP</span>
+                            <span class="denominator" id="numX">10 Ini.</span>
+                        </div>
+                        <span> = <span id="resultadoK" style="color: var(--accent-color);">50</span> (K)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grafico-box">
+                <h2 class="pixel-font" style="font-size: 1.5rem; color: #e6edf3; margin-top: 0;">Radar (Gráfico Cartesiano)</h2>
+                <canvas id="graficoCanvas" width="400" height="300"></canvas>
+                <p style="text-align: center; font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">Eixo X = Inimigos | Eixo Y = XP Total</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const inputK = document.getElementById('constante');
+        const inputX = document.getElementById('valorX');
+        const labelK = document.getElementById('labelK');
+        const labelX = document.getElementById('labelX');
+        const displayY = document.getElementById('numY');
+        const displayX = document.getElementById('numX');
+        const displayK = document.getElementById('resultadoK');
+        
+        // Configuração do Gráfico
+        const canvas = document.getElementById('graficoCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function desenharGrafico(k, x, y) {
+            // Limpa o canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Margens para os eixos
+            const margem = 40;
+            const larguraUtil = canvas.width - margem * 2;
+            const alturaUtil = canvas.height - margem * 2;
+            const origemX = margem;
+            const origemY = canvas.height - margem;
+
+            // Escalas (Valores máximos possíveis: X=100, Y=200*100=20000)
+            const maxX = 100;
+            const maxY = 20000;
+            
+            // Desenha os eixos cartesianos
+            ctx.beginPath();
+            ctx.moveTo(origemX, margem);
+            ctx.lineTo(origemX, origemY); // Eixo Y
+            ctx.lineTo(canvas.width - margem, origemY); // Eixo X
+            ctx.strokeStyle = "#8b949e";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Ponto atual no gráfico
+            const posX = origemX + (x / maxX) * larguraUtil;
+            const posY = origemY - (y / maxY) * alturaUtil;
+
+            // Desenha a reta da Origem até o ponto atual
+            ctx.beginPath();
+            ctx.moveTo(origemX, origemY); // Nasce no 0,0
+            ctx.lineTo(posX, posY);
+            ctx.strokeStyle = "#00d4ff"; // Cor neon
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Desenha o Ponto (Bolinha)
+            ctx.beginPath();
+            ctx.arc(posX, posY, 6, 0, Math.PI * 2);
+            ctx.fillStyle = "#fff";
+            ctx.fill();
+            ctx.strokeStyle = "#00d4ff";
+            ctx.stroke();
+
+            // Texto (0,0) na origem
+            ctx.fillStyle = "#8b949e";
+            ctx.font = "12px monospace";
+            ctx.fillText("(0,0)", origemX - 30, origemY + 15);
+        }
+
+        function calcular() {
+            const k = parseInt(inputK.value);
+            const x = parseInt(inputX.value);
+            const y = k * x; 
+            
+            labelK.innerText = k;
+            labelX.innerText = x;
+            
+            displayY.innerText = y + " XP";
+            displayX.innerText = x + " Ini.";
+            displayK.innerText = k;
+
+            // Atualiza o desenho em tempo real
+            desenharGrafico(k, x, y);
+        }
+
+        inputK.oninput = calcular;
+        inputX.oninput = calcular;
+        
+        calcular(); // Inicia com o gráfico já desenhado
+    </script>
+</body>
+</html>

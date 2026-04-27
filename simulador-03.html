@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora ACAFE | RafaMat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117; --accent-color: #ffd700; 
+            --text-main: #e6edf3; --text-secondary: #8b949e; --card-bg: #161b22;
+        }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; line-height: 1.6; }
+        .pixel-font { font-family: 'VT323', monospace; }
+        header { padding: 1.5rem 5%; background: rgba(13, 17, 23, 0.95); border-bottom: 1px solid #30363d; }
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: bold; font-size: 1.5rem; letter-spacing: 2px; }
+        .logo span { color: var(--accent-color); }
+        nav ul { list-style: none; display: flex; gap: 2rem; padding: 0; margin: 0; }
+        nav a { color: var(--text-main); text-decoration: none; transition: 0.3s; }
+        nav a:hover { color: var(--accent-color); }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        
+        .simulador-box { background: var(--card-bg); padding: 2.5rem; border-radius: 8px; border: 1px solid var(--accent-color); }
+        
+        .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+        
+        .input-group label { display: block; margin-bottom: 0.3rem; color: var(--text-secondary); font-size: 1rem;}
+        .input-group input, .input-group select { 
+            width: 100%; padding: 0.6rem; background: #0d1117; border: 1px solid #30363d; 
+            color: var(--text-main); border-radius: 4px; font-size: 1.2rem; box-sizing: border-box;
+        }
+        .input-group input:focus, .input-group select:focus { border-color: var(--accent-color); outline: none; }
+        
+        .input-destaque input { color: var(--accent-color); font-weight: bold; border-color: rgba(255, 215, 0, 0.5); }
+        .input-campus select { color: #00d4ff; border-color: #00d4ff; cursor: pointer; }
+
+        .painel-resultado { 
+            margin-top: 2rem; padding-top: 2rem; border-top: 1px dashed #30363d; 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: center;
+        }
+        .score-box { background: #0d1117; padding: 1.5rem; border-radius: 8px; border: 1px solid #30363d; display: flex; flex-direction: column; justify-content: center; align-items: center;}
+        .score-box h3 { margin: 0 0 0.5rem 0; font-size: 1rem; color: var(--text-secondary); text-transform: uppercase; }
+        .score-value { font-size: 3.5rem; margin: 0; text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+
+        .rank-a { color: #00ff66; text-shadow: 0 0 15px rgba(0, 255, 102, 0.5); } /* Aprovado */
+        .rank-c { color: #ff3366; text-shadow: 0 0 15px rgba(255, 51, 102, 0.5); } /* Reprovado */
+
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        
+        .nota-rodape { font-size: 0.8rem; color: #8b949e; text-align: center; margin-top: 1.5rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo"><a href="index.html" style="text-decoration:none; color:inherit;">RAFA<span>MAT</span></a></div>
+            <ul>
+                <li><a href="laboratorio.html" style="color: var(--accent-color);">Voltar ao Lobby</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1 class="pixel-font" style="text-align:center; font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--accent-color);">Avaliador de Score ACAFE</h1>
+        <p style="text-align:center; color: var(--text-secondary); margin-bottom: 2rem;">Motor balizado no Escore do Último Colocado (Medicina 2026/1).</p>
+        
+        <div class="simulador-box">
+            
+            <div class="grid-inputs">
+                <div class="input-group input-campus" style="grid-column: 1 / -1; margin-bottom: 1rem;">
+                    <label class="pixel-font">Selecione seu Objetivo (Fase do Chefe):</label>
+                    <select id="campusSelect" class="pixel-font">
+                        <option value="0">--- ESCOLHA O CAMPUS ---</option>
+                        <option value="4608.70">UNIVALI - Itajaí (Corte: 4608.70)</option>
+                        <option value="4595.88">FURB - Blumenau (Corte: 4595.88)</option>
+                        <option value="4581.71">UNESC - Criciúma (Corte: 4581.71)</option>
+                        <option value="4579.67">UNIVILLE - Joinville (Corte: 4579.67)</option>
+                        <option value="4564.28">UNOCHAPECÓ - Chapecó (Corte: 4564.28)</option>
+                        <option value="4562.90">UNIDAVI - Rio do Sul (Corte: 4562.90)</option>
+                        <option value="4554.48">UNIPLAC - Lages (Corte: 4554.48)</option>
+                        <option value="4554.06">UNIFEBE - Brusque (Corte: 4554.06)</option>
+                        <option value="4548.54">UNOESC - Joaçaba (Corte: 4548.54)</option>
+                        <option value="4513.71">UnC - Concórdia (Corte: 4513.71)</option>
+                        <option value="4512.75">UnC - Porto União (Corte: 4512.75)</option>
+                        <option value="4488.61">UnC - Mafra (Corte: 4488.61)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label class="pixel-font">Português (Max 14):</label>
+                    <input type="number" id="port" min="0" max="14" placeholder="0">
+                </div>
+                <div class="input-group">
+                    <label class="pixel-font">Líng. Estrangeira (Max 7):</label>
+                    <input type="number" id="estr" min="0" max="7" placeholder="0">
+                </div>
+                <div class="input-group">
+                    <label class="pixel-font">Matemática (Max 7):</label>
+                    <input type="number" id="mat" min="0" max="7" placeholder="0">
+                </div>
+                <div class="input-group">
+                    <label class="pixel-font">Física (Max 7):</label>
+                    <input type="number" id="fis" min="0" max="7" placeholder="0">
+                </div>
+                <div class="input-group">
+                    <label class="pixel-font">Química (Max 7):</label>
+                    <input type="number" id="qui" min="0" max="7" placeholder="0">
+                </div>
+                <div class="input-group">
+                    <label class="pixel-font">Biologia (Max 7):</label>
+                    <input type="number" id="bio" min="0" max="7" placeholder="0">
+                </div>
+                <div class="input-group">
+                    <label class="pixel-font">História (Max 7):</label>
+                    <input type="number" id="hist" min="0" max="7" placeholder="0">
+                </div>
+                <div class="input-group">
+                    <label class="pixel-font">Geografia (Max 7):</label>
+                    <input type="number" id="geo" min="0" max="7" placeholder="0">
+                </div>
+                <div class="input-group input-destaque">
+                    <label class="pixel-font">Redação (0.0 a 10.0):</label>
+                    <input type="number" id="red" min="0" max="10" step="0.1" placeholder="0.0">
+                </div>
+            </div>
+
+            <div class="painel-resultado">
+                <div class="score-box">
+                    <h3 class="pixel-font">Escore Final</h3>
+                    <p id="displayNota" class="pixel-font score-value" style="color: var(--accent-color);">0.00</p>
+                </div>
+                <div class="score-box" style="padding: 1rem;">
+                    <h3 class="pixel-font">Status da Missão</h3>
+                    <p id="displayRank" class="pixel-font" style="color: var(--text-secondary); font-size: 1.5rem; margin: 0; line-height: 1.2;">AGUARDANDO<br>DADOS</p>
+                </div>
+            </div>
+            
+            <p class="pixel-font nota-rodape">Dados oficiais do Vestibular ACAFE 2026/1 (Medicina). Média, DP e Corte do último colocado[cite: 1, 2, 3].</p>
+
+        </div>
+    </main>
+
+    <script>
+        // Matriz com o multiplicador oficial da ACAFE (Base 50, Fator 10)
+        const constantes = {
+            port: { m: 4.4480, dp: 1.7124, peso: 14, max: 14 },
+            estr: { m: 6.1560, dp: 1.1428, peso: 7, max: 7 },
+            mat:  { m: 2.5482, dp: 1.4042, peso: 7, max: 7 },
+            fis:  { m: 2.6134, dp: 1.2838, peso: 7, max: 7 },
+            qui:  { m: 4.4534, dp: 1.5610, peso: 7, max: 7 },
+            bio:  { m: 3.4680, dp: 1.3073, peso: 7, max: 7 },
+            hist: { m: 5.3772, dp: 1.2322, peso: 7, max: 7 },
+            geo:  { m: 3.6599, dp: 1.4106, peso: 7, max: 7 },
+            red:  { m: 7.6844, dp: 2.0868, peso: 10, max: 10 }
+        };
+
+        const ids = Object.keys(constantes);
+        const inputs = ids.map(id => document.getElementById(id));
+        const campusSelect = document.getElementById('campusSelect');
+        const displayNota = document.getElementById('displayNota');
+        const displayRank = document.getElementById('displayRank');
+
+        function calcularScore() {
+            let scoreTotal = 0;
+            let preencheuAlgo = false;
+
+            inputs.forEach(input => {
+                let id = input.id;
+                let val = parseFloat(input.value);
+                
+                if (!isNaN(val)) {
+                    preencheuAlgo = true;
+                    if (val > constantes[id].max) val = constantes[id].max;
+                    if (val < 0) val = 0;
+                } else {
+                    val = 0;
+                }
+                
+                // Fórmula de Escore Padronizado da ACAFE
+                let z = (val - constantes[id].m) / constantes[id].dp;
+                let et = (50 + 10 * z) * constantes[id].peso;
+                scoreTotal += et;
+            });
+
+            if (preencheuAlgo) {
+                displayNota.innerText = scoreTotal.toFixed(2);
+                let corte = parseFloat(campusSelect.value);
+
+                if (corte === 0) {
+                    displayRank.innerText = "ESCOLHA O\nCAMPUS";
+                    displayRank.className = "pixel-font";
+                    displayRank.style.color = "#00d4ff";
+                    displayRank.style.fontSize = "1.8rem";
+                } else if (scoreTotal >= corte) {
+                    displayRank.innerText = "APROVADO\n(Fase concluída)";
+                    displayRank.className = "pixel-font rank-a";
+                    displayRank.style.fontSize = "2rem";
+                } else {
+                    displayRank.innerText = "REPROVADO\n(Tente novamente)";
+                    displayRank.className = "pixel-font rank-c";
+                    displayRank.style.fontSize = "1.8rem";
+                }
+            } else {
+                displayNota.innerText = "0.00";
+                displayRank.innerText = "AGUARDANDO\nDADOS";
+                displayRank.className = "pixel-font";
+                displayRank.style.color = "var(--text-secondary)";
+                displayRank.style.fontSize = "1.5rem";
+            }
+        }
+
+        inputs.forEach(input => input.addEventListener('input', calcularScore));
+        campusSelect.addEventListener('change', calcularScore);
+    </script>
+</body>
+</html>
