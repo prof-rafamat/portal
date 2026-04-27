@@ -10,6 +10,7 @@
 
   gtag('config', 'G-4L0XG1G4GK');
 </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora ACAFE | RafaMat</title>
@@ -52,15 +53,14 @@
         .score-box h3 { margin: 0 0 0.5rem 0; font-size: 1rem; color: var(--text-secondary); text-transform: uppercase; }
         .score-value { font-size: 3.5rem; margin: 0; text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
 
-        .rank-a { color: #00ff66; text-shadow: 0 0 15px rgba(0, 255, 102, 0.5); } /* Aprovado */
-        .rank-c { color: #ff3366; text-shadow: 0 0 15px rgba(255, 51, 102, 0.5); } /* Reprovado */
+        .rank-a { color: #00ff66; text-shadow: 0 0 15px rgba(0, 255, 102, 0.5); } 
+        .rank-c { color: #ff3366; text-shadow: 0 0 15px rgba(255, 51, 102, 0.5); } 
 
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         
         .nota-rodape { font-size: 0.8rem; color: #8b949e; text-align: center; margin-top: 1.5rem; }
     </style>
 </head>
-
 <body>
     <header>
         <nav>
@@ -146,23 +146,23 @@
                 </div>
             </div>
             
-            <p class="pixel-font nota-rodape">Dados oficiais do Vestibular ACAFE 2026/1 (Medicina). Média, DP e Corte do último colocado[cite: 1, 2, 3].</p>
+            <p class="pixel-font nota-rodape">Matriz Matemática Corrigida: Dados oficiais cruzados do Vestibular ACAFE 2026/1 (Medicina).</p>
 
         </div>
     </main>
 
     <script>
-        // Matriz com o multiplicador oficial da ACAFE (Base 50, Fator 10)
+        // Matriz com correção absoluta dos blocos do edital e fórmula de soma exata
         const constantes = {
-            port: { m: 4.4480, dp: 1.7124, peso: 14, max: 14 },
-            estr: { m: 6.1560, dp: 1.1428, peso: 7, max: 7 },
+            port: { m: 7.6844, dp: 2.0868, peso: 14, max: 14 },
+            estr: { m: 4.4480, dp: 1.7124, peso: 7, max: 7 },
             mat:  { m: 2.5482, dp: 1.4042, peso: 7, max: 7 },
             fis:  { m: 2.6134, dp: 1.2838, peso: 7, max: 7 },
-            qui:  { m: 4.4534, dp: 1.5610, peso: 7, max: 7 },
-            bio:  { m: 3.4680, dp: 1.3073, peso: 7, max: 7 },
+            qui:  { m: 3.4680, dp: 1.3073, peso: 7, max: 7 },
+            bio:  { m: 4.4534, dp: 1.5610, peso: 7, max: 7 },
             hist: { m: 5.3772, dp: 1.2322, peso: 7, max: 7 },
             geo:  { m: 3.6599, dp: 1.4106, peso: 7, max: 7 },
-            red:  { m: 7.6844, dp: 2.0868, peso: 10, max: 10 }
+            red:  { m: 6.1560, dp: 1.1428, peso: 10, max: 10 }
         };
 
         const ids = Object.keys(constantes);
@@ -187,9 +187,11 @@
                     val = 0;
                 }
                 
-                // Fórmula de Escore Padronizado da ACAFE
+                // Fórmula Oficial Reconstruída a partir do Boletim de Desempenho
                 let z = (val - constantes[id].m) / constantes[id].dp;
-                let et = (50 + 10 * z) * constantes[id].peso;
+                let fatorPeso = constantes[id].peso / 73;
+                let et = 500 + (100 * fatorPeso * z);
+                
                 scoreTotal += et;
             });
 
