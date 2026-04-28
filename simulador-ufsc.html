@@ -125,15 +125,31 @@
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 
         .footer-note { text-align: center; color: #555; margin-top: 2rem; font-size: 0.9rem; }
-
+.btn-voltar {
+            color: var(--danger-color);
+            text-decoration: none;
+            border: 2px solid var(--danger-color);
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            transition: 0.2s;
+        }
+        .btn-voltar:hover {
+            background: var(--danger-color);
+            color: #000;
+            box-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo pixel-font" style="font-size: 2rem; color: #fff;">Simulador<span style="color: var(--accent-color);">UFSC</span></div>
+<header>
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <a href="laboratorio.html" class="pixel-font btn-voltar">&lt; LOBBY</a>
+            <div class="logo pixel-font" style="font-size: 2rem; color: #fff;">Simulador<span style="color: var(--accent-color);">UFSC</span></div>
+        </div>
         <div class="high-score-panel">
-            <p class="pixel-font" style="margin:0; color: #8b949e; font-size: 1.2rem;">HIGH SCORE</p>
+            <p class="pixel-font" style="margin:0; color: #8b949e; font-size: 1.2rem;">PONTUAÇÃO BRUTA TOTAL</p>
             <p id="totalScore" class="pixel-font high-score-val">00.00</p>
         </div>
     </header>
