@@ -1,6 +1,8 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4L0XG1G4GK"></script>
 <script>
@@ -10,6 +12,7 @@
 
   gtag('config', 'G-4L0XG1G4GK');
 </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador UFSC | RafaMat</title>
@@ -48,6 +51,21 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
         }
 
+        .btn-voltar {
+            color: var(--danger-color);
+            text-decoration: none;
+            border: 2px solid var(--danger-color);
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            transition: 0.2s;
+        }
+        .btn-voltar:hover {
+            background: var(--danger-color);
+            color: #000;
+            box-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+        }
+
         .logo { font-weight: bold; font-size: 1.5rem; letter-spacing: 2px; }
         .logo span { color: var(--accent-color); }
 
@@ -83,7 +101,7 @@
 
         .questão-row {
             display: grid;
-            grid-template-columns: 60px 1fr 1fr 80px;
+            grid-template-columns: 50px 90px 1fr 1fr 80px;
             gap: 0.5rem;
             align-items: center;
             margin-bottom: 0.5rem;
@@ -96,6 +114,18 @@
         .questão-row:hover { border-color: var(--accent-color); }
 
         label { color: var(--text-main); font-size: 1rem; }
+
+        select.limite-select {
+            background: #000;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            padding: 6px 2px;
+            font-size: 1rem;
+            border-radius: 4px;
+            width: 100%;
+            outline: none;
+        }
+        select.limite-select:focus { border-color: var(--accent-color); }
 
         input { 
             background: #000;
@@ -125,31 +155,18 @@
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 
         .footer-note { text-align: center; color: #555; margin-top: 2rem; font-size: 0.9rem; }
-.btn-voltar {
-            color: var(--danger-color);
-            text-decoration: none;
-            border: 2px solid var(--danger-color);
-            padding: 5px 15px;
-            border-radius: 4px;
-            font-size: 1.2rem;
-            transition: 0.2s;
-        }
-        .btn-voltar:hover {
-            background: var(--danger-color);
-            color: #000;
-            box-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
-        }
+
     </style>
 </head>
 <body>
 
-<header>
+    <header>
         <div style="display: flex; align-items: center; gap: 1.5rem;">
             <a href="laboratorio.html" class="pixel-font btn-voltar">&lt; LOBBY</a>
             <div class="logo pixel-font" style="font-size: 2rem; color: #fff;">Simulador<span style="color: var(--accent-color);">UFSC</span></div>
         </div>
         <div class="high-score-panel">
-            <p class="pixel-font" style="margin:0; color: #8b949e; font-size: 1.2rem;">HIGH SCORE</p>
+            <p class="pixel-font" style="margin:0; color: #8b949e; font-size: 1.2rem;">PONTUAÇÃO BRUTA TOTAL</p>
             <p id="totalScore" class="pixel-font high-score-val">00.00</p>
         </div>
     </header>
@@ -158,7 +175,7 @@
         
         <img src="logo_ufsc_16bit.png" alt="Logo UFSC Pixelada" class="pixel-logo-ufsc">
         
-        <p style="text-align:center; color: var(--text-secondary); margin-bottom: 2rem;">Preencha o gabarito oficial e a sua resposta (1 a 99). A pontuação no topo atualizará automaticamente.</p>
+        <p style="text-align:center; color: var(--text-secondary); margin-bottom: 2rem;">Indique o limite da questão e preencha o gabarito. Assinalar valor acima do máximo zera a pontuação.</p>
 
         <div id="grid-blocos">
             </div>
@@ -171,7 +188,7 @@
             </div>
         </div>
 
-        <p class="pixel-font footer-note">ALERTA: APENAS VALORES ENTRE 01 E 99 SÃO ACEITOS PELO SISTEMA PARA SOMATÓRIAS.</p>
+        <p class="pixel-font footer-note">ALERTA: APENAS VALORES ENTRE 01 E 99 SÃO ACEITOS PELO CARTÃO-RESPOSTA.</p>
     </main>
 
     <script>
@@ -197,6 +214,12 @@
                 htmlBloco += `
                     <div class="questão-row">
                         <span class="pixel-font" style="color:#8b949e; font-size: 1.2rem;">Q.${i.toString().padStart(2, '0')}</span>
+                        <select class="pixel-font limite-select" onchange="processarMissao()">
+                            <option value="99">Até 64</option>
+                            <option value="63">Até 32</option>
+                            <option value="31">Até 16</option>
+                            <option value="15">Até 08</option>
+                        </select>
                         <input type="number" class="pixel-font gabarito" placeholder="GAB" min="1" max="99" oninput="processarMissao()">
                         <input type="number" class="pixel-font resposta" placeholder="SUA" min="1" max="99" oninput="processarMissao()">
                         <div class="status-badge pixel-font score-parcial">0.00</div>
@@ -217,7 +240,6 @@
             const rows = document.querySelectorAll('.questão-row');
             let somaTotal = 0;
 
-            // 1. Soma da Redação
             let notaRedacao = parseFloat(document.getElementById('notaRedacao').value);
             if (!isNaN(notaRedacao)) {
                 if (notaRedacao > 10) notaRedacao = 10;
@@ -225,8 +247,8 @@
                 somaTotal += notaRedacao;
             }
 
-            // 2. Soma das Objetivas
             rows.forEach(row => {
+                const limite = parseInt(row.querySelector('.limite-select').value);
                 const gabInput = row.querySelector('.gabarito');
                 const respInput = row.querySelector('.resposta');
                 const display = row.querySelector('.score-parcial');
@@ -242,6 +264,12 @@
 
                 if (g < 1 || g > 99 || r < 1 || r > 99) {
                     display.innerText = "ERR";
+                    display.style.color = "var(--danger-color)";
+                    return;
+                }
+
+                if (r > limite) {
+                    display.innerText = "0.00";
                     display.style.color = "var(--danger-color)";
                     return;
                 }
@@ -269,6 +297,5 @@
             document.getElementById('totalScore').innerText = somaTotal.toFixed(2);
         }
     </script>
-    
 </body>
 </html>
