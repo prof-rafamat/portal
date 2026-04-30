@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4L0XG1G4GK"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -73,7 +72,7 @@
 
     <main class="container">
         <h1 class="pixel-font" style="text-align:center; font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--accent-color);">Avaliador de Score ACAFE</h1>
-        <p style="text-align:center; color: var(--text-secondary); margin-bottom: 2rem;">Motor balizado no Escore do Último Colocado (Medicina 2026/1).</p>
+        <p style="text-align:center; color: var(--text-secondary); margin-bottom: 2rem;">Motor balizado na Média Histórica de Escores (Últimas 7 Edições).</p>
         
         <div class="simulador-box">
             
@@ -82,18 +81,18 @@
                     <label class="pixel-font">Selecione seu Objetivo (Fase do Chefe):</label>
                     <select id="campusSelect" class="pixel-font">
                         <option value="0">--- ESCOLHA O CAMPUS ---</option>
-                        <option value="4608.70">UNIVALI - Itajaí (Corte: 4608.70)</option>
-                        <option value="4595.88">FURB - Blumenau (Corte: 4595.88)</option>
-                        <option value="4581.71">UNESC - Criciúma (Corte: 4581.71)</option>
-                        <option value="4579.67">UNIVILLE - Joinville (Corte: 4579.67)</option>
-                        <option value="4564.28">UNOCHAPECÓ - Chapecó (Corte: 4564.28)</option>
-                        <option value="4562.90">UNIDAVI - Rio do Sul (Corte: 4562.90)</option>
-                        <option value="4554.48">UNIPLAC - Lages (Corte: 4554.48)</option>
-                        <option value="4554.06">UNIFEBE - Brusque (Corte: 4554.06)</option>
-                        <option value="4548.54">UNOESC - Joaçaba (Corte: 4548.54)</option>
-                        <option value="4513.71">UnC - Concórdia (Corte: 4513.71)</option>
-                        <option value="4512.75">UnC - Porto União (Corte: 4512.75)</option>
-                        <option value="4488.61">UnC - Mafra (Corte: 4488.61)</option>
+                        <option value="4607.90">UNIVALI - Itajaí (Corte: 4607.90)</option>
+                        <option value="4593.40">FURB - Blumenau (Corte: 4593.40)</option>
+                        <option value="4586.30">UNIVILLE - Joinville (Corte: 4586.30)</option>
+                        <option value="4583.50">UNESC - Criciúma (Corte: 4583.50)</option>
+                        <option value="4558.00">UNOCHAPECÓ - Chapecó (Corte: 4558.00)</option>
+                        <option value="4557.00">UNOESC - Joaçaba (Corte: 4557.00)</option>
+                        <option value="4551.40">UNIPLAC - Lages (Corte: 4551.40)</option>
+                        <option value="4551.30">UNIFEBE - Brusque (Corte: 4551.30)</option>
+                        <option value="4543.60">UNIDAVI - Rio do Sul (Corte: 4543.60)</option>
+                        <option value="4507.50">UnC - Mafra (Corte: 4507.50)</option>
+                        <option value="4504.60">UnC - Concórdia (Corte: 4504.60)</option>
+                        <option value="4471.10">UnC - Porto União (Corte: 4471.10)</option>
                     </select>
                 </div>
 
@@ -146,22 +145,28 @@
                 </div>
             </div>
             
-            <p class="pixel-font nota-rodape">Matriz Matemática Corrigida: Dados oficiais cruzados do Vestibular ACAFE 2026/1 (Medicina).</p>
+            <div style="margin-top: 20px; padding: 15px; border: 1px solid #ff3366; background-color: rgba(255, 51, 102, 0.1); border-radius: 5px; text-align: center;">
+                <p style="color: #e6edf3; font-size: 0.9rem; margin: 0; font-family: 'Inter', sans-serif;">
+                    <strong>ALERTA DE ESTIMATIVA:</strong> Os cálculos e notas de corte deste simulador não são oficiais da edição vigente. Eles representam uma projeção estatística baseada na <strong>média móvel dos desvios padrão e notas de corte das últimas 7 edições</strong> do vestibular da ACAFE. Utilize este resultado como um balizador estratégico para os seus estudos, não como garantia de aprovação.
+                </p>
+            </div>
+
+            <p class="pixel-font nota-rodape">Matriz Matemática Corrigida: Dados estatísticos baseados na média móvel das últimas 7 edições da ACAFE.</p>
 
         </div>
     </main>
 
     <script>
-        // Matriz com correção absoluta dos blocos do edital e fórmula de soma exata
+        // Matriz com correção atualizada: Médias e Desvios Padrão das últimas 7 edições
         const constantes = {
-            port: { m: 7.6844, dp: 2.0868, peso: 14, max: 14 },
-            estr: { m: 4.4480, dp: 1.7124, peso: 7, max: 7 },
-            mat:  { m: 2.5482, dp: 1.4042, peso: 7, max: 7 },
-            fis:  { m: 2.6134, dp: 1.2838, peso: 7, max: 7 },
-            qui:  { m: 3.4680, dp: 1.3073, peso: 7, max: 7 },
-            bio:  { m: 4.4534, dp: 1.5610, peso: 7, max: 7 },
-            hist: { m: 5.3772, dp: 1.2322, peso: 7, max: 7 },
-            geo:  { m: 3.6599, dp: 1.4106, peso: 7, max: 7 },
+            port: { m: 8.43, dp: 1.54, peso: 14, max: 14 },
+            estr: { m: 1.95, dp: 1.15, peso: 7, max: 7 },
+            mat:  { m: 3.85, dp: 1.25, peso: 7, max: 7 },
+            fis:  { m: 6.11, dp: 1.34, peso: 7, max: 7 },
+            qui:  { m: 2.30, dp: 1.17, peso: 7, max: 7 },
+            bio:  { m: 2.36, dp: 1.45, peso: 7, max: 7 },
+            hist: { m: 3.89, dp: 1.25, peso: 7, max: 7 },
+            geo:  { m: 3.90, dp: 1.35, peso: 7, max: 7 },
             red:  { m: 6.1560, dp: 1.1428, peso: 10, max: 10 }
         };
 
@@ -187,7 +192,7 @@
                     val = 0;
                 }
                 
-                // Fórmula Oficial Reconstruída a partir do Boletim de Desempenho
+                // Fórmula Oficial Reconstruída
                 let z = (val - constantes[id].m) / constantes[id].dp;
                 let fatorPeso = constantes[id].peso / 73;
                 let et = 500 + (100 * fatorPeso * z);
