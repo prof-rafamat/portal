@@ -214,7 +214,6 @@
                     <div class="questão-row">
                         <span class="pixel-font" style="color:#8b949e; font-size: 1.2rem;">Q.${i.toString().padStart(2, '0')}</span>
                         <select class="pixel-font limite-select" onchange="processarMissao()">
-                            <!-- Os values agora representam a ÚLTIMA PROPOSIÇÃO, não a soma -->
                             <option value="64">Até 64</option>
                             <option value="32">Até 32</option>
                             <option value="16">Até 16</option>
@@ -231,7 +230,6 @@
             gridBlocos.innerHTML += htmlBloco;
         });
 
-        // Retorna um array com os valores das proposições (bits) que formam a soma
         function getBits(n) {
             const bits = [1, 2, 4, 8, 16, 32, 64];
             return bits.filter(b => (n & b) === b);
@@ -272,14 +270,12 @@
                 const propsG = getBits(g);
                 const propsR = getBits(r);
 
-                // Verifica se o GABARITO digitado contém proposição maior que a permitida no limite
                 if (propsG.some(b => b > maxProp)) {
                     display.innerText = "ERR";
                     display.style.color = "var(--danger-color)";
                     return;
                 }
 
-                // Regra UFSC: Assinalar proposição maior que a máxima permitida zera a questão
                 if (propsR.some(b => b > maxProp)) {
                     display.innerText = "0.00";
                     display.style.color = "var(--danger-color)";
@@ -299,7 +295,7 @@
                 if (r === g) parcial = 1.00; 
 
                 display.innerText = parcial.toFixed(2);
-                display.style.color = parcial > 0 ? "var(--accent-color)" : "#555";
+                display.style.color = "var(--accent-color)"; 
                 somaTotal += parcial;
             });
 
