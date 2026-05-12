@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4L0XG1G4GK"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -13,9 +12,68 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professor RafaMat  | Matemática & Vestibulares</title>
+    <title>Professor RafaMat | Matemática & Vestibulares</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos para os novos botões de contato no rodapé */
+        footer {
+            margin-top: 4rem;
+            padding: 3rem 5%;
+            border-top: 2px solid #30363d;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-contato {
+            font-family: 'VT323', monospace;
+            text-decoration: none;
+            padding: 12px 25px;
+            font-size: 1.4rem;
+            border: 2px solid;
+            border-radius: 4px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-email {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn-email:hover {
+            background: var(--accent-color);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+        }
+
+        .btn-insta {
+            color: #ff3366; /* Tom para combinar com o estilo 'danger' do site */
+            border-color: #ff3366;
+        }
+
+        .btn-insta:hover {
+            background: #ff3366;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 51, 102, 0.4);
+        }
+
+        .footer-text {
+            color: #8b949e;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
 <body>
 
@@ -23,10 +81,10 @@
         <nav>
             <div class="logo">RAFA<span>MAT</span></div>
             <ul>
-    <li><a href="laboratorio.html">Laboratório Virtual</a></li>
-    <li><a href="fase_em_construcao.png">Simulados</a></li>
-    <li><a href="fase_em_construcao.png">Mapas Mentais</a></li>
-</ul>
+                <li><a href="laboratorio.html">Laboratório Virtual</a></li>
+                <li><a href="fase_em_construcao.png">Simulados</a></li>
+                <li><a href="fase_em_construcao.png">Mapas Mentais</a></li>
+            </ul>
         </nav>
     </header>
 
@@ -36,16 +94,28 @@
             <p>Preparação estratégica para ENEM e Vestibulares.</p>
             <div class="stats">
                 <div class="stat-item">
-                    <span class="pixel-font">20</span>
-                    <p>Anos de Experiência</p>
+                    <span class="number">20+</span>
+                    <span class="label">Anos de Experiência</span>
                 </div>
                 <div class="stat-item">
-                    <span class="pixel-font">600</span>
-                    <p>Questões Resolvidas</p>
+                    <span class="number">600+</span>
+                    <span class="label">Jogos na Biblioteca</span>
                 </div>
             </div>
         </section>
     </main>
+
+    <footer>
+        <div class="social-links">
+            <a href="mailto:resolviseusproblemas@gmail.com" class="btn-contato btn-email">
+                Email de Contato
+            </a>
+            <a href="https://www.instagram.com/prof.rafamat/" target="_blank" class="btn-contato btn-insta">
+                Instagram
+            </a>
+        </div>
+        <p class="footer-text">© 2026 RafaMat Lab - Todos os direitos reservados.</p>
+    </footer>
 
 </body>
 </html>

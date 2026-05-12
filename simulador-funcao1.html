@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Função do 1º Grau | RafaMat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #080a0f; 
+            --accent-color: #00ffcc; 
+            --danger-color: #ff3366;
+            --text-main: #e6edf3;
+            --card-bg: #11141d;
+            --border-color: #30363d;
+            --header-bg: rgba(8, 10, 15, 0.95);
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            margin: 0;
+        }
+
+        .pixel-font { font-family: 'VT323', monospace; }
+
+        header { 
+            position: sticky;
+            top: 0;
+            padding: 1rem 5%; 
+            background: var(--header-bg); 
+            border-bottom: 2px solid var(--accent-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            margin-bottom: 2rem;
+        }
+
+        .btn-voltar {
+            color: var(--danger-color);
+            text-decoration: none;
+            border: 2px solid var(--danger-color);
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            transition: 0.2s;
+        }
+
+        .btn-voltar:hover {
+            background: rgba(255, 51, 102, 0.1);
+        }
+
+        .logo { font-size: 2rem; color: #fff; text-decoration: none; }
+        .logo span { color: var(--accent-color); }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 1rem 2rem 1rem;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            box-sizing: border-box;
+        }
+
+        .painel-controle {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            height: fit-content;
+        }
+
+        .titulo {
+            font-family: 'VT323', monospace;
+            color: var(--accent-color);
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px dashed var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .grupo-input {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #8b949e;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            background: #000;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 4px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input[type="number"]:focus, select:focus {
+            border-color: var(--accent-color);
+        }
+
+        .resultado-tipo {
+            background: rgba(0, 255, 204, 0.1);
+            border: 1px solid var(--accent-color);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .resultado-tipo span {
+            display: block;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-top: 5px;
+        }
+
+        .grafico-box {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            position: relative;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 500px !important;
+        }
+
+        @media (max-width: 800px) {
+            .container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="laboratorio.html" class="pixel-font btn-voltar">&lt; LOBBY SIMULADORES</a>
+        <a href="index.html" class="logo pixel-font">RAFA<span>MAT</span></a>
+    </header>
+
+    <div class="container">
+        <div class="painel-controle">
+            <h2 class="titulo">PARÂMETROS</h2>
+
+            <div class="grupo-input">
+                <label>Coeficiente Angular (a):</label>
+                <input type="number" id="coefA" value="1" step="0.5" oninput="atualizarGrafico()">
+            </div>
+
+            <div class="grupo-input">
+                <label>Coeficiente Linear (b):</label>
+                <input type="number" id="coefB" value="0" step="0.5" oninput="atualizarGrafico()">
+            </div>
+
+            <div class="grupo-input">
+                <label>Domínio (x):</label>
+                <select id="dominio" onchange="atualizarGrafico()">
+                    <option value="R">Reais (R)</option>
+                    <option value="R+">Reais não negativos (R+)</option>
+                    <option value="R-">Reais não positivos (R-)</option>
+                </select>
+            </div>
+
+            <div class="grupo-input">
+                <label>Contradomínio (y):</label>
+                <select id="contradominio" onchange="atualizarGrafico()">
+                    <option value="R">Reais (R)</option>
+                    <option value="R+">Reais não negativos (R+)</option>
+                    <option value="R-">Reais não positivos (R-)</option>
+                </select>
+            </div>
+
+            <div class="resultado-tipo">
+                <strong style="color: #8b949e; font-size: 0.9rem;">CLASSIFICAÇÃO</strong>
+                <span id="tipoFuncao">Função Linear (Identidade)</span>
+                <div id="equacaoTexto" style="margin-top: 10px; font-style: italic;">y = x</div>
+            </div>
+        </div>
+
+        <div class="grafico-box">
+            <canvas id="graficoFuncao"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let chartInstance = null;
+
+        function determinarTipoFuncao(a, b) {
+            if (a === 0) {
+                return "Função Constante";
+            } else if (b === 0) {
+                return a === 1 ? "Função Linear (Identidade)" : "Função Linear";
+            } else {
+                return "Função Afim";
+            }
+        }
+
+        function formatarEquacao(a, b) {
+            let eq = "y = ";
+            if (a === 0) {
+                eq += b;
+            } else {
+                if (a === 1) eq += "x";
+                else if (a === -1) eq += "-x";
+                else eq += a + "x";
+
+                if (b > 0) eq += " + " + b;
+                else if (b < 0) eq += " - " + Math.abs(b);
+            }
+            return eq;
+        }
+
+        function atualizarGrafico() {
+            const a = parseFloat(document.getElementById('coefA').value) || 0;
+            const b = parseFloat(document.getElementById('coefB').value) || 0;
+            const dom = document.getElementById('dominio').value;
+            const codom = document.getElementById('contradominio').value;
+
+            document.getElementById('tipoFuncao').innerText = determinarTipoFuncao(a, b);
+            document.getElementById('equacaoTexto').innerText = formatarEquacao(a, b);
+
+            const dataPoints = [];
+            for (let rawX = -10; rawX <= 10.05; rawX += 0.1) {
+                let x = Math.round(rawX * 10) / 10;
+                let y = Math.round((a * x + b) * 100) / 100;
+                let validX = true;
+                let validY = true;
+
+                if (dom === "R+") validX = x >= 0;
+                if (dom === "R-") validX = x <= 0;
+                
+                if (codom === "R+") validY = y >= 0;
+                if (codom === "R-") validY = y <= 0;
+
+                if (validX && validY) {
+                    dataPoints.push({x: x, y: y});
+                } else {
+                    dataPoints.push({x: x, y: null}); 
+                }
+            }
+
+            renderizarChart(dataPoints);
+        }
+
+        function renderizarChart(data) {
+            const ctx = document.getElementById('graficoFuncao').getContext('2d');
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'f(x)',
+                        data: data,
+                        borderColor: '#00ffcc',
+                        backgroundColor: '#00ffcc',
+                        borderWidth: 3,
+                        showLine: true,
+                        pointRadius: 0, 
+                        fill: false,
+                        spanGaps: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'center',
+                            min: -10,
+                            max: 10,
+                            grid: {
+                                color: (ctx) => ctx.tick.value === 0 ? '#fff' : 'rgba(255, 255, 255, 0.1)',
+                                lineWidth: (ctx) => ctx.tick.value === 0 ? 2 : 1
+                            },
+                            ticks: { color: '#8b949e' }
+                        },
+                        y: {
+                            type: 'linear',
+                            position: 'center',
+                            min: -10,
+                            max: 10,
+                            grid: {
+                                color: (ctx) => ctx.tick.value === 0 ? '#fff' : 'rgba(255, 255, 255, 0.1)',
+                                lineWidth: (ctx) => ctx.tick.value === 0 ? 2 : 1
+                            },
+                            ticks: { color: '#8b949e' }
+                        }
+                    }
+                }
+            });
+        }
+
+        atualizarGrafico();
+    </script>
+</body>
+</html>

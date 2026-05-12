@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estimativa ENEM TRI | RafaMat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #080a0f; 
+            --accent-color: #00ffcc; 
+            --danger-color: #ff3366; 
+            --text-main: #e6edf3;
+            --card-bg: #11141d;
+            --header-bg: rgba(8, 10, 15, 0.98);
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            margin: 0;
+            padding-bottom: 120px; /* Espaço para o painel fixo não cobrir o conteúdo */
+            background-image: radial-gradient(circle, #0a192f 0%, #080a0f 100%);
+        }
+
+        .pixel-font { font-family: 'VT323', monospace; }
+
+        header { 
+            position: sticky;
+            top: 0;
+            padding: 1rem 5%; 
+            background: var(--header-bg); 
+            border-bottom: 2px solid var(--accent-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 50;
+        }
+
+        .logo { font-size: 2rem; color: #fff; }
+        .logo span { color: var(--accent-color); }
+
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+
+        .arcade-box { 
+            background: var(--card-bg); 
+            padding: 1.5rem; 
+            border: 2px solid #30363d; 
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .bloco-titulo {
+            border-bottom: 2px dashed var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+            color: var(--accent-color);
+            font-size: 1.8rem;
+        }
+
+        .grid-materias {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .materia-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #1f242e;
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .materia-nome { color: #8b949e; font-size: 1.2rem; display: block; margin-bottom: 0.5rem; }
+
+        input.input-acertos { 
+            background: #000;
+            border: 1px solid #30363d;
+            color: #fff;
+            padding: 8px;
+            font-size: 1.5rem;
+            text-align: center;
+            border-radius: 4px;
+            width: 80px;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        input.input-acertos:focus { border-color: var(--accent-color); }
+
+        .tri-results {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            margin-top: 10px;
+            border-top: 1px dashed #30363d;
+            padding-top: 10px;
+        }
+
+        .tri-min { color: var(--danger-color); }
+        .tri-med { color: var(--accent-color); font-weight: bold; font-size: 1.2rem;}
+        .tri-max { color: #00ff00; }
+
+        .legenda-tri {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #30363d;
+            margin-top: 1rem;
+        }
+
+        .legenda-item { font-size: 0.85rem; line-height: 1.3; }
+        .legenda-item strong { display: block; margin-bottom: 3px; text-transform: uppercase; }
+
+        /* PAINEL FIXO NO RODAPÉ */
+        .painel-final {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--header-bg);
+            border-top: 2px solid var(--accent-color);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
+        }
+
+        .btn-calcular {
+            background-color: var(--accent-color);
+            color: #000;
+            font-size: 1.8rem;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        .btn-calcular:hover {
+            background-color: #00e6b8;
+            transform: scale(1.02);
+        }
+
+        .btn-calcular:active {
+            transform: scale(0.98);
+        }
+
+        .resultado-box {
+            display: flex;
+            align-items: center;
+            background: #000;
+            padding: 5px 20px;
+            border-radius: 4px;
+            border: 1px solid #30363d;
+        }
+
+        .nota-final {
+            font-size: 3rem;
+            color: var(--accent-color);
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+            margin: 0;
+            min-width: 120px;
+            text-align: right;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo pixel-font">Simulador<span style="color: var(--accent-color);">ENEM</span></div>
+        <div class="pixel-font" style="color: #8b949e;">RAFA<span>MAT</span> LAB</div>
+    </header>
+
+    <main class="container">
+        <div class="arcade-box">
+            <h2 class="pixel-font bloco-titulo">SIMULADOR DE PROFICIÊNCIA (TRI)</h2>
+            <p style="color: #8b949e; font-size: 0.9rem; margin-bottom: 1.5rem;">Insira os acertos de 0 a 45 para verificar a variação da TRI por área.</p>
+            
+            <div class="grid-materias" id="gridInputs">
+                </div>
+
+            <div class="legenda-tri">
+                <div class="legenda-item">
+                    <strong class="tri-min">Cenário Incoerente</strong>
+                    <span style="color: #8b949e;">Nota se o aluno acertar questões difíceis e errar fáceis (sugere "chute").</span>
+                </div>
+                <div class="legenda-item">
+                    <strong class="tri-med">Média Esperada</strong>
+                    <span style="color: #8b949e;">Nota padrão baseada na curva histórica de acertos daquela área.</span>
+                </div>
+                <div class="legenda-item">
+                    <strong class="tri-max">Cenário Coerente</strong>
+                    <span style="color: #8b949e;">Nota se o aluno acertar as fáceis/médias e errar apenas as difíceis.</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; text-align: center; border-top: 1px solid #30363d; padding-top: 1.5rem;">
+                <span class="pixel-font" style="font-size: 1.5rem; color: #fff;">REDAÇÃO (0 a 1000):</span><br>
+                <input type="number" id="notaRedacao" class="pixel-font input-acertos" style="width: 120px; border-color: #fff; margin-top: 10px;" placeholder="Ex: 920" min="0" max="1000" step="20">
+            </div>
+        </div>
+    </main>
+
+    <div class="painel-final">
+        <button class="btn-calcular pixel-font" onclick="calcularMediaFinal()">CALCULAR MÉDIA</button>
+        <div class="resultado-box">
+            <span class="pixel-font" style="color: #8b949e; font-size: 1.5rem; margin-right: 15px;">GERAL:</span>
+            <span id="mediaGeral" class="pixel-font nota-final">---.-</span>
+        </div>
+    </div>
+
+    <script>
+        const mockTRI = {
+            "Matematica": { base: 350, incremento: 12.5, varMin: 60, varMax: 90 },
+            "Natureza": { base: 320, incremento: 10.5, varMin: 45, varMax: 70 },
+            "Humanas": { base: 340, incremento: 9.8, varMin: 40, varMax: 55 },
+            "Linguagens": { base: 360, incremento: 8.5, varMin: 35, varMax: 45 }
+        };
+
+        const areas = ["Matematica", "Natureza", "Humanas", "Linguagens"];
+
+        function montarGrid() {
+            const grid = document.getElementById('gridInputs');
+            let html = '';
+            
+            areas.forEach(area => {
+                html += `
+                    <div class="materia-card">
+                        <span class="pixel-font materia-nome">${area.toUpperCase()}</span>
+                        <input type="number" id="acerto-${area}" class="pixel-font input-acertos" placeholder="0" min="0" max="45" oninput="calcularArea('${area}')">
+                        <div class="tri-results pixel-font">
+                            <span class="tri-min" id="min-${area}">000</span>
+                            <span class="tri-med" id="med-${area}">000</span>
+                            <span class="tri-max" id="max-${area}">000</span>
+                        </div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+        }
+
+        // Calcula APENAS a área conforme o usuário digita (mantém a interatividade local)
+        function calcularArea(area) {
+            let acertos = parseInt(document.getElementById(`acerto-${area}`).value);
+            let minDisplay = document.getElementById(`min-${area}`);
+            let medDisplay = document.getElementById(`med-${area}`);
+            let maxDisplay = document.getElementById(`max-${area}`);
+
+            if (!isNaN(acertos) && acertos >= 0 && acertos <= 45) {
+                let stats = mockTRI[area];
+                let notaMedia = stats.base + (acertos * stats.incremento);
+                if (acertos === 0) notaMedia = 0;
+                if (acertos === 45 && area === "Matematica") notaMedia = 980;
+
+                let notaMin = Math.max(0, notaMedia - stats.varMin);
+                let notaMax = Math.min(1000, notaMedia + stats.varMax);
+
+                minDisplay.innerText = notaMin.toFixed(0);
+                medDisplay.innerText = notaMedia.toFixed(0);
+                maxDisplay.innerText = notaMax.toFixed(0);
+            } else {
+                minDisplay.innerText = "000";
+                medDisplay.innerText = "000";
+                maxDisplay.innerText = "000";
+            }
+            
+            // Reseta a média geral se o usuário alterar algum valor depois de já ter calculado
+            document.getElementById('mediaGeral').innerText = "---.-";
+        }
+
+        // Calcula a Média Geral apenas quando o botão é clicado
+        function calcularMediaFinal() {
+            let somaMedias = 0;
+            let areasPreenchidas = 0;
+
+            // Coleta e valida as 4 áreas
+            areas.forEach(area => {
+                let acertos = parseInt(document.getElementById(`acerto-${area}`).value);
+                if (!isNaN(acertos) && acertos >= 0 && acertos <= 45) {
+                    areasPreenchidas++;
+                    let stats = mockTRI[area];
+                    let notaMedia = stats.base + (acertos * stats.incremento);
+                    if (acertos === 0) notaMedia = 0;
+                    if (acertos === 45 && area === "Matematica") notaMedia = 980;
+                    somaMedias += notaMedia;
+                }
+            });
+
+            // Coleta e valida a Redação
+            let notaRedacao = parseFloat(document.getElementById('notaRedacao').value);
+            if (!isNaN(notaRedacao) && notaRedacao >= 0 && notaRedacao <= 1000) {
+                areasPreenchidas++;
+                somaMedias += notaRedacao;
+            }
+
+            // Exige todas as 5 notas preenchidas
+            if (areasPreenchidas === 5) {
+                let mediaFinal = somaMedias / 5;
+                document.getElementById('mediaGeral').innerText = mediaFinal.toFixed(1);
+            } else {
+                alert("ERRO DE VALIDAÇÃO: Preencha corretamente os acertos das 4 áreas e a nota da redação para calcular a Média Geral.");
+                document.getElementById('mediaGeral').innerText = "---.-";
+            }
+        }
+
+        window.onload = montarGrid;
+    </script>
+</body>
+</html>
